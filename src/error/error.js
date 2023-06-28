@@ -11,3 +11,5 @@ export class BadUserRequestError extends Error {
     (this.status = 404), (this.errorType = "BadUserRequestError");
   }
 }
+
+// Add unauthorized error extended class

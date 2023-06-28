@@ -1,6 +1,6 @@
 import Joi from "joi";
-
-export const userValidator = Joi.object({
+// make sure the password to add a new user does what its supposed to do
+export const createUserValidator = Joi.object({
   firstname: Joi.string().required(),
   lastname: Joi.string().required(),
   username: Joi.string().required(),

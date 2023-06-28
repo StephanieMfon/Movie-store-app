@@ -20,11 +20,17 @@ export default class MovieController {
     }
 
     const newMovie = await Movie.create(req.body);
+
+    const { genre, title, description, movieLength, yearReleased } = newMovie;
     res.status(201).json({
       status: "success",
       message: "Movie added succesfully",
       data: {
-        newMovie,
+        genre,
+        title,
+        description,
+        movieLength,
+        yearReleased,
       },
     });
   }

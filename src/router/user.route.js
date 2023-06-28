@@ -9,7 +9,6 @@ router.patch(
   "/add-to-wishlist",
   tryCatchFunction(UserControllers.addMovieToWishlist)
 );
-router.get("/login", tryCatchFunction(UserControllers.loginUser));
-router.get("/find", tryCatchFunction(UserControllers.findUser));
+router.post("/login", tryCatchFunction(UserControllers.loginUser));
 
 export { router };

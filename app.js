@@ -20,7 +20,7 @@ mongoose
 const port = Number(process.env.PORT) || 4000;
 app.use(express.json());
 app.use(morgan("dev"));
-app.use("/api/v1/user", userRouter);
+app.use("/api/v1/users", userRouter);
 app.use("/api/v1/movie", movieRouter);
 app.use(globalErrorHandler);
 app.listen(port, () => {

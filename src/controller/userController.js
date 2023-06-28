@@ -1,19 +1,20 @@
 import {
-  userValidator,
+  createUserValidator,
   loginUserValidator,
 } from "./../validators/userValidator.js";
-import User from "./../model/userModel.js";
+import User from "../model/userModel.js";
 import Movie from "./../model/movieModel.js";
 
 import { mongoIdValidator } from "../validators/mongoIdValidator.js";
 import { NotfoundError, BadUserRequestError } from "../error/error.js";
 import bcrypt from "bcrypt";
+// change the bcrypt to saving in a mongoose hook instead
 
 export default class UserControllers {
   static async createUser(req, res, next) {
-    const { error } = userValidator.validate(req.body);
+    const { error } = createUserValidator.validate(req.body);
     if (error) throw error;
-
+    // Use the or mongodb operator to make this user.find email or username at once
     const emailExists = await User.find({ email: req.body.email });
     if (emailExists.length > 0)
       throw new BadUserRequestError("A user with that email alraedy exists");
@@ -48,6 +49,8 @@ export default class UserControllers {
     const user = User.findById(id);
     if (!user) throw new NotfoundError(`User with Id ${id} not found`);
 
+    // fix up the things you need to fix up with JWT
+    // return only username Id and movieWishList when user logs in
     res.status(200).json({
       status: "success",
       message: "User found",
@@ -56,40 +59,9 @@ export default class UserControllers {
       },
     });
   }
-  static async addMovieToWishlist(req, res, next) {
-    const { id } = req.query;
-    // const { err } = mongoIdValidator.validate(req.query);
-    // if (err) throw err;
 
-    const movieInCollection = await Movie.find({
-      _id: req.body.selectedMovieId,
-    });
-    if (!movieInCollection)
-      throw new NotfoundError("Please input a valid movie ID");
-
-    // const movieInWishlist = await User.find({
-    //   "movieWishlist[0]._id": "req.body.selectedMovieId",
-    // });
-    // if (movieInWishlist) {
-    //   throw new BadUserRequestError(
-    //     "This movie already exists in your wishlist"
-    //   );
-    // }
-    const user = await User.updateOne(
-      {
-        _id: id,
-      },
-      { $push: { movieWishlist: req.body.selectedMovieId } }
-    );
-    res.status(200).json({
-      status: "success",
-      message: " Movie wishlist updated",
-      data: {
-        user,
-      },
-    });
-  }
-
+  // return all the user details - the password.
+  // Add the proper comments to all the code controllers and routes
   static async loginUser(req, res) {
     const { error } = loginUserValidator.validate(req.body);
     if (error) throw error;
@@ -105,11 +77,16 @@ export default class UserControllers {
     if (!hash)
       throw new BadUserRequestError("Incorrect username, email or password");
 
+    const { firstname, lastname, username, email } = user;
+
     res.status(200).json({
       message: "Login succesful",
       status: "success",
       data: {
-        user,
+        firstname,
+        lastname,
+        username,
+        email,
       },
     });
   }

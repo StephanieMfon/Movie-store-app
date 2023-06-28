@@ -38,8 +38,14 @@ const UserSchema = new Schema(
         ref: "Movie",
       },
     ],
-    firstname: String,
-    lastname: String,
+    firstname: {
+      type:String,
+      trim:true
+    },
+    lastname: {
+      type:String,
+      trim:true
+    },
     fullname: String,
   },
 

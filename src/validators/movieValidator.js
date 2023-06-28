@@ -3,14 +3,13 @@ import JoiObjectId from "joi-objectid";
 
 Joi.objectid = JoiObjectId(Joi);
 const addNewMovieValidator = Joi.object({
-  movieGenreId: Joi.objectId().optional(),
-  movieGenre: Joi.objectId().optional(),
-  isDeleted: Joi.boolean().required(),
-  status: Joi.string().required(),
+  genre: Joi.string().optional(),
+  isDeleted: Joi.boolean().optional(),
+  status: Joi.string().optional(),
   title: Joi.string().required().min(3),
   description: Joi.string().required().min(15),
   movieLength: Joi.string().required(),
-  yearReleased: Joi.string().required(),
+  yearReleased: Joi.number().required(),
 }).strict();
 
 export { addNewMovieValidator };
